@@ -6,6 +6,5 @@ from .models import Credit
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_credit_for_new_user(sender, instance, created, **kwargs):
-    """Un compte gratuit démarre avec 10 crédits (cf. cahier des charges S16)."""
     if created:
         Credit.objects.create(utilisateur=instance, solde=10)

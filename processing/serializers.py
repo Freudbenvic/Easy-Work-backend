@@ -8,10 +8,7 @@ class AIProcessSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AIProcess
-        fields = [
-            'id', 'image', 'type_traitement', 'statut',
-            'message_erreur', 'date_creation', 'date_fin',
-        ]
+        fields = ['id', 'image', 'type_traitement', 'statut', 'message_erreur', 'date_creation', 'date_fin']
         read_only_fields = fields
 
 

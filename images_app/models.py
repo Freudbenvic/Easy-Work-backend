@@ -3,8 +3,6 @@ from django.db import models
 
 
 class Image(models.Model):
-    """Une image importée par un utilisateur, avec son résultat éventuel (cf. S21)."""
-
     utilisateur = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='images'
     )
@@ -17,4 +15,4 @@ class Image(models.Model):
         ordering = ['-date_creation']
 
     def __str__(self):
-        return f"Image #{self.pk} — {self.utilisateur.email}"
+        return f"Image #{self.pk} - {self.utilisateur.email}"

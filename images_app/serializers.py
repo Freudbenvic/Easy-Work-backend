@@ -7,10 +7,7 @@ class ImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Image
-        fields = [
-            'id', 'fichier_original', 'fichier_resultat', 'outil',
-            'date_creation', 'est_favori',
-        ]
+        fields = ['id', 'fichier_original', 'fichier_resultat', 'outil', 'date_creation', 'est_favori']
         read_only_fields = fields
 
     def get_est_favori(self, obj):

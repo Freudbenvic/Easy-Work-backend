@@ -14,14 +14,6 @@ COUT_SUPPRESSION_FOND = 1
 
 
 class BackgroundRemovalView(APIView):
-    """
-    POST /api/processing/background-removal/
-    multipart/form-data: { fichier: <image> }
-
-    Traitement synchrone (suffisant pour la V1 — cf. cahier des charges S6) :
-    reçoit l'image, appelle le modèle IA, renvoie directement le résultat.
-    """
-
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
@@ -30,11 +22,9 @@ class BackgroundRemovalView(APIView):
         fichier = upload_serializer.validated_data['fichier']
 
         credit, _ = Credit.objects.get_or_create(utilisateur=request.user)
-        if credit.solde < COUT_SUPPRESSION_FOND:
-            return Response(
-                {'detail': 'Crédits insuffisants.'},
-                status=status.HTTP_402_PAYMENT_REQUIRED,
-            )
+        is_illimite = request.user.is_staff or request.user.is_superuser
+        if not is_illimite and credit.solde < COUT_SUPPRESSION_FOND:
+            return Response({'detail': 'Crédits insuffisants.'}, status=status.HTTP_402_PAYMENT_REQUIRED)
 
         image = Image.objects.create(
             utilisateur=request.user,
@@ -58,7 +48,8 @@ class BackgroundRemovalView(APIView):
             process.date_fin = timezone.now()
             process.save(update_fields=['statut', 'date_fin'])
 
-            Credit.objects.filter(pk=credit.pk).update(solde=F('solde') - COUT_SUPPRESSION_FOND)
+            if not is_illimite:
+                Credit.objects.filter(pk=credit.pk).update(solde=F('solde') - COUT_SUPPRESSION_FOND)
         except Exception as exc:  # noqa: BLE001
             process.statut = AIProcess.Statut.ECHEC
             process.message_erreur = str(exc)[:255]
@@ -79,8 +70,6 @@ class BackgroundRemovalView(APIView):
 
 
 class HistoriqueView(generics.ListAPIView):
-    """GET /api/processing/historique/ — cf. cahier des charges S15."""
-
     serializer_class = AIProcessSerializer
     permission_classes = [permissions.IsAuthenticated]
 

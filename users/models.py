@@ -21,7 +21,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractUser):
     """
-    Utilisateur Easy Work — authentification par e-mail (cf. cahier des
+    Utilisateur Easy Work - authentification par e-mail (cf. cahier des
     charges S5.1 : "Authentification classique : Email + mot de passe").
     """
 

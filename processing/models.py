@@ -4,8 +4,6 @@ from images_app.models import Image
 
 
 class AIProcess(models.Model):
-    """Un traitement IA appliqué à une image (cf. S21 + S15 Historique)."""
-
     class TypeTraitement(models.TextChoices):
         SUPPRESSION_FOND = 'suppression_fond', "Suppression d'arrière-plan"
         EFFACEMENT_OBJET = 'effacement_objet', 'Effacement d’objet'
@@ -33,4 +31,4 @@ class AIProcess(models.Model):
         ordering = ['-date_creation']
 
     def __str__(self):
-        return f"{self.type_traitement} — {self.statut} — {self.utilisateur.email}"
+        return f"{self.type_traitement} - {self.statut} - {self.utilisateur.email}"

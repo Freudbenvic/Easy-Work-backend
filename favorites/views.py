@@ -4,11 +4,6 @@ from .serializers import FavoriteSerializer
 
 
 class FavoriteViewSet(viewsets.ModelViewSet):
-    """
-    GET/POST /api/favorites/
-    DELETE   /api/favorites/{id}/
-    """
-
     serializer_class = FavoriteSerializer
     permission_classes = [permissions.IsAuthenticated]
     http_method_names = ['get', 'post', 'delete', 'head', 'options']
